@@ -1,0 +1,10 @@
+<network>
+  <name>labnet</name>
+  <bridge name='virbr1'/>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.10' end='192.168.100.50'/>
+    </dhcp>
+  </ip>
+</network>
+
