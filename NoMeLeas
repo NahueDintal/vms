@@ -1,0 +1,13 @@
+lista de comandos para virsh
+
+virsh list --all
+
+virsh start 'name'
+
+virsh shutdown 'name'
+
+virsh destroy 'name'
+
+virsh console 'name'
+
+salir de console ctrl + ]

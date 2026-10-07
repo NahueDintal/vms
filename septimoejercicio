@@ -1,0 +1,48 @@
+# 1. Creá el script
+sudo tee /usr/local/bin/backup-etc.sh > /dev/null <<'EOF'
+#!/bin/bash
+FECHA=$(date +%Y%m%d)
+DESTINO=/var/backups/etc-$FECHA.tar.gz
+tar -czf "$DESTINO" /etc 2>/dev/null
+echo "Backup creado: $DESTINO" | logger -t backup-etc
+EOF
+
+sudo chmod +x /usr/local/bin/backup-etc.sh
+
+# 2. Creá el service
+sudo tee /etc/systemd/system/backup-etc.service > /dev/null <<'EOF'
+[Unit]
+Description=Backup diario de /etc
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/backup-etc.sh
+EOF
+
+# 3. Creá el timer
+sudo tee /etc/systemd/system/backup-etc.timer > /dev/null <<'EOF'
+[Unit]
+Description=Ejecuta backup de /etc todos los días a las 3 AM
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+# 4. Habilitá y arrancá
+sudo systemctl daemon-reload
+sudo systemctl enable --now backup-etc.timer
+
+# 5. Verificá
+systemctl list-timers
+systemctl status backup-etc.timer
+
+# 6. Ejecutalo manualmente para probar
+sudo systemctl start backup-etc.service
+ls -lh /var/backups/
+
+# 7. Mira los logs
+journalctl -t backup-etc

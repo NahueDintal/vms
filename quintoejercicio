@@ -1,0 +1,19 @@
+# 1. Ver uso de disco
+df -h
+
+# 2. Encontrar los directorios más pesados desde /
+sudo du -sh /* 2>/dev/null | sort -rh | head -10
+
+# 3. Encontrar archivos mayores a 100MB
+sudo find / -type f -size +100M 2>/dev/null
+
+# 4. Simulá el problema: creá un archivo gigante
+dd if=/dev/zero of=/tmp/archivo-grande bs=1M count=500
+df -h   # mirá cómo creció el uso
+
+# 5. Encontralo
+sudo find / -type f -size +400M 2>/dev/null
+
+# 6. Eliminalo
+rm /tmp/archivo-grande
+df -h   # volvió a la normalidad

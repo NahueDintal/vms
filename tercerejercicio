@@ -1,0 +1,15 @@
+# Lanza un proceso con baja prioridad (nice 19, lo más "amable")
+nice -n 19 tar -czf /tmp/backup.tar.gz /usr/share/doc &
+echo $! > /tmp/backup.pid
+
+# Míralo en top/htop y observa el valor NI
+top
+
+# Cambiale la prioridad a uno que corre en el momento (renice)
+renice -n 0 -p $(cat /tmp/backup.pid)
+
+# Verificá
+ps -o pid,ni,cmd -p $(cat /tmp/backup.pid)
+
+# Si querés, matalo
+kill $(cat /tmp/backup.pid)

@@ -1,0 +1,16 @@
+# 1. Antes de arriesgarte, hacé un snapshot desde el HOST (Arch, no la VM)
+# En tu host:
+virsh snapshot-create-as server pre-rompimiento --description "Antes de romper"
+
+# 2. Ahora SÍ, dentro de la VM, rompé /etc/fstab
+sudo cp /etc/fstab /etc/fstab.bak
+echo "/dev/inventado /mnt/inventado ext4 defaults 0 0" | sudo tee -a /etc/fstab
+
+# 3. Reiniciá
+sudo reboot
+
+# 4. La VM va a quedar colgada esperando ese dispositivo.
+#    Ahí vas a ver el modo emergency.
+
+# 5. Desde el HOST, revertí el snapshot
+virsh snapshot-revert server pre-rompimiento --running

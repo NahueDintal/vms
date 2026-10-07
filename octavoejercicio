@@ -1,0 +1,11 @@
+# 1. Creá un cron como estudent
+crontab -e
+
+# 2. Añadí esta línea (limpiar /tmp cada domingo a las 4 AM):
+0 4 * * 0 find /tmp -type f -mtime +7 -delete
+
+# 3. Verificá
+crontab -l
+
+# 4. Mira los logs de cron
+sudo journalctl -u crond

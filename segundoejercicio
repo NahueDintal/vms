@@ -1,0 +1,26 @@
+# 1. Intenta arrancarlo
+sudo systemctl start nginx
+sudo systemctl status nginx
+# (todavía no lo instalaste, así que va a fallar — ese es el punto)
+
+# 2. Instalalo
+sudo dnf install -y nginx
+
+# 3. Arrancalo y habilitalo
+sudo systemctl enable --now nginx
+sudo systemctl status nginx
+
+# 4. Mira los logs del servicio
+journalctl -u nginx -n 20
+
+# 5. Simula un fallo: rompe la config a propósito
+sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
+echo "esto rompe todo" | sudo tee -a /etc/nginx/nginx.conf
+sudo systemctl restart nginx   # va a fallar
+
+# 6. Diagnosticá con el log
+journalctl -u nginx -xe
+
+# 7. Restaurá la config
+sudo cp /etc/nginx/nginx.conf.bak /etc/nginx/nginx.conf
+sudo systemctl restart nginx

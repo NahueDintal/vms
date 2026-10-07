@@ -1,0 +1,23 @@
+# 1. Simula: crea un archivo grande y ábrelo con un proceso
+dd if=/dev/zero of=/tmp/atrapado bs=1M count=200
+
+# 2. Ábrelo con "less" en background
+less /tmp/atrapado &
+# (presiona Ctrl+Z, luego escribe "bg" para dejarlo en background)
+
+# 3. Bórralo
+rm /tmp/atrapado
+
+# 4. df sigue mostrando el espacio ocupado
+df -h
+
+# 5. Encuentra qué proceso lo tiene abierto
+sudo lsof +L1
+# o
+sudo lsof | grep deleted
+
+# 6. Mata el proceso de less
+pkill less
+
+# 7. Verifica que el espacio se liberó
+df -h

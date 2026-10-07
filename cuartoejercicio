@@ -1,0 +1,14 @@
+# 1. Ver logs de las últimas 2 horas
+journalctl --since "2 hours ago"
+
+# 2. Ver solo errores desde el último arranque
+journalctl -b -p err
+
+# 3. Ver logs de un servicio específico desde una hora
+journalctl -u sshd --since "1 hour ago"
+
+# 4. Ver logs en tiempo real (dejalo corriendo y en otra terminal generá tráfico SSH)
+journalctl -f
+
+# 5. Guardá los logs de hoy en un archivo para "reportar el incidente"
+journalctl --since today > /tmp/reporte-incidente-$(date +%Y%m%d).log

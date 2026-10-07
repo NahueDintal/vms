@@ -1,0 +1,18 @@
+# 1. Lanza un proceso que consuma CPU en background
+yes > /dev/null &
+echo $!   # guarda el PID
+
+# 2. Míralo en tiempo real
+top
+# (dentro de top: presiona 'P' para ordenar por CPU, 'q' para salir)
+
+# 3. Alternativa moderna
+htop
+# (si no está: sudo dnf install -y htop)
+
+# 4. Identifica el PID y mándale señal
+ps aux | grep yes
+kill -15 <PID>   # SIGTERM, apagado limpio
+
+# 5. Si no muere, forzalo
+kill -9 <PID>    # SIGKILL, sin piedad

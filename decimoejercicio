@@ -1,0 +1,18 @@
+# 1. Snapshot de seguridad desde el HOST
+virsh snapshot-create-as server pre-recuperacion-root
+
+# 2. Reiniciá la VM y en GRUB (rápido, tenés ~3 seg):
+#    - Presioná 'e' para editar la entrada
+#    - Buscá la línea que empieza con "linux" y añadí al final:
+#      rd.break
+#    - Ctrl+X para arrancar
+
+# 3. En el prompt de emergencia:
+mount -o remount,rw /sysroot
+chroot /sysroot
+passwd root
+touch /.autorelabel
+exit
+exit
+
+# 4. La VM reinicia sola. Esperá (el relabel tarda un poco).
